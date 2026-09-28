@@ -1,0 +1,4 @@
+dist/
+node_modules/
+package-lock.json
+ngff-rfc8-schema.json

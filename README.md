@@ -37,13 +37,26 @@ ngff-rfc-8-validate /some/collection.json
 ```
 (from a Python environment where the package is installed).
 
-## JavaScript
+## JavaScript package
 
-(in progress)
+To include the JavaScript package in other projects, install the library from the release artifacts:
+
+```bash
+npm install https://github.com/fractal-analytics-platform/ngff-rfc8-validator/releases/download/v0.0.1-a1/ngff-rfc8-validator-v0.0.1-a1.tgz
+```
+
+Then, import the validate function:
+
+```javascript
+import { validate } from '@fractal-analytics-platform/ngff-rfc8-validator';
+
+validate(data);
+```
 
 ## Development
 
 Python:
+
 ```bash
 # Init
 uv venv
@@ -54,6 +67,17 @@ uv run pytest python/tests
 
 # Generate single-file JSON Schema
 uv run python3 python/scripts/build_single_schema.py > ngff-rfc8.json
+```
+
+JavaScript:
+
+```bash
+# Init
+npm ci
+npm run build
+
+# Run tests
+npm run test
 ```
 
 ## Contributors and license

@@ -2,9 +2,9 @@ name: Python CI
 
 on:
   push:
-    branches: ["main", "first-schemas"] # FIXME: remove first-schemas
+    branches: ["main"]
   pull_request:
-    branches: ["main", "first-schemas"] # FIXME: remove first-schemas
+    branches: ["main"]
 
 
 permissions: {}

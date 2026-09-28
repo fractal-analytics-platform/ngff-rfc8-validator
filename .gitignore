@@ -1,3 +1,5 @@
 __pycache__
 .*.swp
 dist
+node_modules
+ngff-rfc8-schema.json

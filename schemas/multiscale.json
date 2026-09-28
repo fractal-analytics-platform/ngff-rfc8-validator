@@ -44,7 +44,6 @@
     "name",
     "attributes"
   ],
-  "additionalProperties": false,
   "oneOf": [
     {
       "required": [

@@ -1,0 +1,76 @@
+name: Create GitHub release (npm)
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+[a-c][0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-[a-c][0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+alpha[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+beta[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+rc[0-9]+'
+
+permissions: {}
+
+defaults:
+  run:
+    working-directory: ./javascript
+
+jobs:
+  create-release-draft:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - run: gh release create "${GH_REF_NAME}" --draft --title "${GH_REF_NAME}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REF_NAME: ${{ github.ref_name }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs: create-release-draft
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - run: npm ci
+      - run: npm run build
+      - run: cp ../LICENSE .
+      - run: npm pack
+
+      - run: mv fractal-analytics-platform-ngff-rfc8-validator-*.tgz "ngff-rfc8-validator-${GH_REF_NAME}.tgz"
+        env:
+          GH_REF_NAME: ${{ github.ref_name }}
+
+      - run: gh release upload "${GH_REF_NAME}" "ngff-rfc8-validator-${GH_REF_NAME}.tgz"
+        env:
+          GH_REF_NAME: ${{ github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
+
+  publish-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: build
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - run: gh release edit "${GH_REF_NAME}" --draft=false
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REF_NAME: ${{ github.ref_name }}
