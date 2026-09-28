@@ -276,23 +276,25 @@ def test_valid_singlescale():
 
 
 def test_missing_attributes_in_multiscale():
-    with pytest.raises(ValidationError):
-        validate_collection(
-            {
-                "ome": {
-                    "version": "0.x",
-                    "name": "root",
-                    "type": "collection",
-                    "nodes": [
-                        {
-                            "type": "multiscale",
-                            "name": "foo",
-                            "path": {"type": "json", "path": "./foo.json"},
-                        }
-                    ],
+    data = {
+        "ome": {
+            "version": "0.x",
+            "name": "root",
+            "type": "collection",
+            "nodes": [
+                {
+                    "type": "multiscale",
+                    "name": "foo",
+                    "path": {"type": "json", "path": "./foo.json"},
                 }
-            }
-        )
+            ],
+        }
+    }
+    with pytest.raises(ValidationError):
+        validate_collection(data)
+    with pytest.raises(ValidationError):
+        validate_collection(data, ignore_nodes=False)
+    validate_collection(data, ignore_nodes=True)
 
 
 def test_invalid_coordinateTransformations_missing_type():

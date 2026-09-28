@@ -6,19 +6,11 @@ from .load_schemas import build_registry
 from .load_schemas import get_ome_schema
 
 
-def validate_collection(data: dict[str, Any]) -> None:
+def get_ome_property(data: dict[str, Any]) -> dict[str, Any]:
     if "ome" in data.keys():
-        validate(
-            instance=data,
-            schema=get_ome_schema(),
-            registry=build_registry(),
-        )
-    elif "attributes" in data.keys() and data.get("node_type") == "group":
-        validate(
-            instance=data["attributes"],
-            schema=get_ome_schema(),
-            registry=build_registry(),
-        )
+        return data["ome"]
+    elif "attributes" in data.keys() and "ome" in data["attributes"].keys():
+        return data["attributes"]["ome"]
     else:
         error = (
             "The document must include a 'ome' property, "
@@ -26,3 +18,19 @@ def validate_collection(data: dict[str, Any]) -> None:
             "See https://ngff.openmicroscopy.org/rfc/8/index.html#metadata-storage"
         )
         raise ValueError(error)
+
+
+def validate_collection(
+    data: dict[str, Any],
+    ignore_nodes: bool = False,
+) -> None:
+    ome_property = get_ome_property(data)
+
+    if ignore_nodes and "nodes" in ome_property.keys():
+        ome_property["nodes"] = []
+
+    validate(
+        instance={"ome": ome_property},
+        schema=get_ome_schema(),
+        registry=build_registry(),
+    )
