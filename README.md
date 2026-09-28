@@ -1,12 +1,15 @@
 # NGFF RFC-8 collection validator
 
-JSON Schemas and validation tools for NGFF RFC-8 collections - see https://ngff.openmicroscopy.org/rfc/8/index.html.
+Proof of concept of validation tools for NGFF RFC-8 collections based on JSON Schemas - see https://ngff.openmicroscopy.org/rfc/8/index.html.
 
 > ⚠️ **WARNING**: This project is a proof of concept. It is experimental, unstable, and not intended for production use.
 
 ## JSON Schemas
 
 Schema files are available in the [`schemas` folder](./schemas).
+
+> **NOTE**: This repository does not include any schema for the [HCS metadata]([url](https://ngff.openmicroscopy.org/rfc/8/index.html#high-content-screening-hcs-metadata)) yet.
+> Also note that this is not a canonical definition of what may be part of the schemas, but a proof of concept of how such schemas may look like.
 
 ## Python package
 
