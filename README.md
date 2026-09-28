@@ -8,7 +8,7 @@ Proof of concept of validation tools for NGFF RFC-8 collections based on JSON Sc
 
 Schema files are available in the [`schemas` folder](./schemas).
 
-> **NOTE**: This repository does not include any schema for the [HCS metadata]([url](https://ngff.openmicroscopy.org/rfc/8/index.html#high-content-screening-hcs-metadata)) yet.
+> **NOTE**: This repository does not include any schema for the [HCS metadata](https://ngff.openmicroscopy.org/rfc/8/index.html#high-content-screening-hcs-metadata) yet.
 > Also note that this is not a canonical definition of what may be part of the schemas, but a proof of concept of how such schemas may look like.
 
 ## Python package
