@@ -73,6 +73,7 @@ JavaScript:
 
 ```bash
 # Init
+cd javascript
 npm ci
 npm run build
 
