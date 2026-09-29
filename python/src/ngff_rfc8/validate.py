@@ -138,6 +138,8 @@ def validate_collection(
 
     ome_data = get_ome_property(data)
     if ignore_nodes and "nodes" in ome_data.keys():
+        if verbose:
+            print("[validate_collection] Setting `nodes=[]`.")
         ome_data["nodes"] = []
     ome_type = ome_data.get("type", RFC8NodeType.UNKNOWN)
 
