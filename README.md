@@ -44,7 +44,7 @@ ngff-rfc-8-validate /some/collection.json
 To include the JavaScript package in other projects, install the library from the release artifacts:
 
 ```bash
-npm install https://github.com/fractal-analytics-platform/ngff-rfc8-validator/releases/download/v0.0.1-a1/ngff-rfc8-validator-v0.0.1-a1.tgz
+npm install https://github.com/fractal-analytics-platform/ngff-rfc8-validator/releases/download/v0.0.1/ngff-rfc8-validator-v0.0.1.tgz
 ```
 
 Then, import the validate function:
