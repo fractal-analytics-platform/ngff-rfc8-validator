@@ -15,8 +15,6 @@ _SINGLESCALE = "singlescale"
 _MULTISCALE = "multiscale"
 _UNKNOWN = "__unknown_node_type__"
 
-_OME_SCHEMA = get_ome_schema()
-
 
 @cache
 def _get_version_ok_path() -> list[str | int]:
@@ -27,7 +25,7 @@ def _get_version_ok_path() -> list[str | int]:
     version is valid, which is then used below when filtering out some spurious error
     branches.
     """
-    allOf_array = _OME_SCHEMA["properties"][_OME]["allOf"]
+    allOf_array = get_ome_schema()["properties"][_OME]["allOf"]
     version_ok_index = allOf_array.index({"$ref": "node.schema"})
     return [
         "properties",
