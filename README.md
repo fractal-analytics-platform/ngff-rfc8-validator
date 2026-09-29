@@ -68,6 +68,9 @@ uv sync --all-groups
 # Run tests
 uv run pytest python/tests
 
+# Serve documentation on http://localhost:8000
+uv run zensical serve
+
 # Generate single-file JSON Schema
 uv run python3 python/scripts/build_single_schema.py > ngff-rfc8.json
 ```
