@@ -2,14 +2,16 @@
 
 Proof of concept of validation tools for NGFF RFC-8 collections based on JSON Schemas - see https://ngff.openmicroscopy.org/rfc/8/index.html.
 
-> ⚠️ **WARNING**: This project is a proof of concept. It is experimental, unstable, and not intended for production use.
+⚠️ **WARNING**: This project is a proof of concept. It is experimental, unstable, and not intended for production use.
 
 ## JSON Schemas
 
 Schema files are available in the [`schemas` folder](./schemas).
 
-> **NOTE**: This repository does not include any schema for the [HCS metadata](https://ngff.openmicroscopy.org/rfc/8/index.html#high-content-screening-hcs-metadata) yet.
-> Also note that this is not a canonical definition of what may be part of the schemas, but a proof of concept of how such schemas may look like.
+Notes:
+1. This is not a canonical definition of what may be part of the schemas, but a proof of concept of how such schemas may look like.
+2. Schemas for the [HCS metadata](https://ngff.openmicroscopy.org/rfc/8/index.html#high-content-screening-hcs-metadata) are not yet included.
+3. The [main node schema](./schemas/node.json) needs to discriminate between various subschemas according to the `type` field. The most natural approach would be using the `oneOf` keyword, but this solution tends to produce a large number of misleading errors (referring to branches which don't match the specified `type`). For this reason we produced an equivalent schema using a combination of `allOf` and `if`/`then` keywords - which resulted in a reduction of the number of errors. The same logic has been applied to [collection schema](./schemas/collection.json) and [multiscale schema](./schemas/multiscale.json) to handle the `nodes`/`path` switch.
 
 ## Python package
 
@@ -52,12 +54,6 @@ import { validate } from '@fractal-analytics-platform/ngff-rfc8-validator';
 
 validate(data);
 ```
-
-## Considerations about the schema structure
-
-The [main node schema](./schemas/node.json) needs to discriminate between various subschema according to the `type` field. The most natural approach would be using the `oneOf` keyword. Unfortunately, this solution tends to produce a large number of misleading errors, referring to branches which don't match the specified `type`. For this reason we produced an equivalent schema using a combination of `allOf` and `if`/`then` keywords. This resulted in a reduction of the number of errors.
-
-The same logic has been applied to [collection schema](./schemas/collection.json) and [multiscale schema](./schemas/multiscale.json) to handle the `nodes`/`path` switch.
 
 ## Development
 
