@@ -1,10 +1,11 @@
 from typing import Any
 
 import pytest
+from devtools import debug
 from jsonschema import ValidationError
 from ngff_rfc8.validate import validate_collection
 
-CASES = [
+DATA_MESSAGE_PAIRS = [
     (
         {
             "ome": {
@@ -135,12 +136,11 @@ CASES = [
 ]
 
 
-@pytest.mark.parametrize("data, message", CASES)
-def test_error_handling(data: dict[str, Any], message: str):
-    from devtools import debug
-
-    debug("Expected message", message)
+@pytest.mark.parametrize("data, expected_message", DATA_MESSAGE_PAIRS)
+def test_error_handling(data: dict[str, Any], expected_message: str):
+    debug(data)
+    debug(expected_message)
     with pytest.raises(ValidationError) as exc_info:
         validate_collection(data=data, verbose=True)
     debug(exc_info.value)
-    assert exc_info.value.message == message
+    assert exc_info.value.message == expected_message

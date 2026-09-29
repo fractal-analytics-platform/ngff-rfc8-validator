@@ -20,7 +20,7 @@ VALID_OME_PROPERTY = {
 
 
 def test_ome_valid_inline():
-    validate_collection({"ome": VALID_OME_PROPERTY})
+    validate_collection({"ome": VALID_OME_PROPERTY}, verbose=True)
 
 
 def test_zarr_valid_inline():
@@ -29,7 +29,8 @@ def test_zarr_valid_inline():
             "zarr_format": 3,
             "node_type": "group",
             "attributes": {"ome": VALID_OME_PROPERTY},
-        }
+        },
+        verbose=True,
     )
 
 
@@ -38,7 +39,7 @@ def test_missing_ome():
         ValueError,
         match="must include a 'ome' object property",
     ):
-        validate_collection({})
+        validate_collection({}, verbose=True)
 
 
 def test_missing_version():
@@ -46,22 +47,26 @@ def test_missing_version():
         ValidationError,
         match="'version' is a required property",
     ):
-        validate_collection({"ome": {"type": "collection", "name": "foo"}})
+        validate_collection({"ome": {"type": "collection", "name": "foo"}}, verbose=True)
 
 
 def test_missing_name():
     with pytest.raises(ValidationError):
-        validate_collection({"ome": {"version": "0.x", "type": "collection"}})
+        validate_collection(
+            {"ome": {"version": "0.x", "type": "collection"}}, verbose=True
+        )
 
 
 def test_invalid_id():
     with pytest.raises(ValidationError):
         validate_collection(
-            {"ome": {"version": "0.x", "type": "collection", "name": "foo", "id": ""}}
+            {"ome": {"version": "0.x", "type": "collection", "name": "foo", "id": ""}},
+            verbose=True,
         )
     with pytest.raises(ValidationError):
         validate_collection(
-            {"ome": {"version": "0.x", "type": "collection", "name": "foo", "id": "??"}}
+            {"ome": {"version": "0.x", "type": "collection", "name": "foo", "id": "??"}},
+            verbose=True,
         )
 
 
@@ -75,7 +80,8 @@ def test_invalid_attributes_type():
                     "name": "foo",
                     "attributes": [],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -114,7 +120,8 @@ def test_valid_empty_labels():
                     }
                 ],
             }
-        }
+        },
+        verbose=True,
     )
 
 
@@ -154,7 +161,8 @@ def test_labels_attribute_missing_label_value():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -197,7 +205,8 @@ def test_valid_labels_attribute():
                     }
                 ],
             }
-        }
+        },
+        verbose=True,
     )
 
 
@@ -239,7 +248,8 @@ def test_invalid_labels_color():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -271,7 +281,8 @@ def test_valid_singlescale():
                     }
                 ],
             }
-        }
+        },
+        verbose=True,
     )
 
 
@@ -291,10 +302,10 @@ def test_missing_attributes_in_multiscale():
         }
     }
     with pytest.raises(ValidationError):
-        validate_collection(data)
+        validate_collection(data, verbose=True)
     with pytest.raises(ValidationError):
-        validate_collection(data, ignore_nodes=False)
-    validate_collection(data, ignore_nodes=True)
+        validate_collection(data, ignore_nodes=False, verbose=True)
+    validate_collection(data, ignore_nodes=True, verbose=True)
 
 
 def test_invalid_coordinateTransformations_missing_type():
@@ -328,7 +339,8 @@ def test_invalid_coordinateTransformations_missing_type():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -364,7 +376,8 @@ def test_invalid_coordinateTransformations_missing_output_id():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -413,7 +426,8 @@ def test_valid_scene():
                     }
                 ],
             }
-        }
+        },
+        verbose=True,
     )
 
 
@@ -455,7 +469,8 @@ def test_invalid_scene_missing_coordinateTransformations():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -504,7 +519,8 @@ def test_invalid_scene_missing_coordinateSystem_id():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -542,7 +558,8 @@ def test_invalid_multiscale_missing_nodes_or_path():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
 
 
@@ -582,5 +599,6 @@ def test_invalid_multiscale_both_nodes_and_path():
                         }
                     ],
                 }
-            }
+            },
+            verbose=True,
         )
