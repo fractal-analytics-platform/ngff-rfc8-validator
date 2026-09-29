@@ -1,3 +1,4 @@
+from enum import StrEnum
 from functools import cache
 from typing import Any
 
@@ -5,15 +6,19 @@ from jsonschema import Draft202012Validator
 from jsonschema import ValidationError
 from jsonschema.exceptions import best_match
 
+from ngff_rfc8._types import JSONValue
 from ngff_rfc8.load_schemas import build_registry
 from ngff_rfc8.load_schemas import get_node_schema
 from ngff_rfc8.load_schemas import get_ome_schema
 
 _OME = "ome"
-_COLLECTION = "collection"
-_SINGLESCALE = "singlescale"
-_MULTISCALE = "multiscale"
-_UNKNOWN = "__unknown_node_type__"
+
+
+class RFC8NodeType(StrEnum):
+    COLLECTION = "collection"
+    SINGLESCALE = "singlescale"
+    MULTISCALE = "multiscale"
+    UNKNOWN = "__unknown_node_type__"
 
 
 @cache
@@ -25,7 +30,7 @@ def _get_version_ok_path() -> list[str | int]:
     version is valid, which is then used below when filtering out some spurious error
     branches.
     """
-    allOf_array = get_ome_schema()["properties"][_OME]["allOf"]
+    allOf_array: list[JSONValue] = get_ome_schema()["properties"][_OME]["allOf"]
     version_ok_index = allOf_array.index({"$ref": "node.schema"})
     return [
         "properties",
@@ -37,7 +42,7 @@ def _get_version_ok_path() -> list[str | int]:
 
 
 @cache
-def _get_oneOf_indices_dict() -> dict[str, int]:
+def _get_oneOf_indices_dict() -> dict[RFC8NodeType, int]:
     """
     The `node` JSON schema has a top-level `oneOf`, which covers four possible `type`
     values: collection, multiscale, singlescale, a different type. This function finds
@@ -50,23 +55,30 @@ def _get_oneOf_indices_dict() -> dict[str, int]:
     `type` value.
     """
     node_schema = get_node_schema()
-    oneOf_array: list[dict[str, Any]] = node_schema["oneOf"]
+    oneOf_array: list[JSONValue] = node_schema["oneOf"]
     if len(oneOf_array) != 4:
         raise RuntimeError(
             "Unexpected length for the `oneOf` array of the `node` schema: "
             f"{len(oneOf_array)}"
         )
-    node_indices: dict[str, int] = {
-        _COLLECTION: oneOf_array.index({"$ref": f"{_COLLECTION}.schema"}),
-        _SINGLESCALE: oneOf_array.index({"$ref": f"{_SINGLESCALE}.schema"}),
-        _MULTISCALE: oneOf_array.index({"$ref": f"{_MULTISCALE}.schema"}),
+    node_indices: dict[RFC8NodeType, int] = {
+        node_type: oneOf_array.index({"$ref": f"{node_type}.schema"})
+        for node_type in (
+            RFC8NodeType.COLLECTION,
+            RFC8NodeType.MULTISCALE,
+            RFC8NodeType.SINGLESCALE,
+        )
     }
-    last_index = (set(range(4)) - set(node_indices.keys())).pop()
-    node_indices[_UNKNOWN] = last_index
+    node_indices[RFC8NodeType.UNKNOWN] = (set(range(4)) - set(node_indices.keys())).pop()
     return node_indices
 
 
-def _is_spurious_error(*, error: ValidationError, ome_type: str, verbose: bool) -> bool:
+def _is_spurious_error(
+    *,
+    error: ValidationError,
+    ome_type: RFC8NodeType,
+    verbose: bool,
+) -> bool:
     """
     Determine whether this is a spurious error, based on the OME type and on the path of
     the error branch.
@@ -118,7 +130,7 @@ def validate_collection(
     ome_data = get_ome_property(data)
     if ignore_nodes and "nodes" in ome_data.keys():
         ome_data["nodes"] = []
-    ome_type = ome_data.get("type", _UNKNOWN)
+    ome_type = ome_data.get("type", RFC8NodeType.UNKNOWN)
 
     if verbose:
         print(f"[validate_collection] {ome_data=}")
@@ -158,7 +170,7 @@ def validate_collection(
                         print(f"[validate_collection] best match: {best_exception}")
                     raise best_exception
         case _:
-            # Fall-back on the standard validate, to avoid handling this complex case
+            # Fall-back on the standard validate, to avoid handling this specific case
             if verbose:
                 print(
                     "[validate_collection] More than one top-level error, fall-back on "

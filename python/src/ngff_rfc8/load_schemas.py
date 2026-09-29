@@ -1,20 +1,17 @@
 import json
 from pathlib import Path
-from typing import TypeAlias
 
 from referencing import Registry
 from referencing import Resource
 
-JSONValue: TypeAlias = (  # noqa: UP040
-    dict[str, "JSONValue"] | list["JSONValue"] | str | int | float | bool | None
-)
+from ngff_rfc8._types import Schema
 
 
 def _get_schema_dir() -> Path:
     return Path(__file__).parent / "schemas"
 
 
-def _get_schema(name: str) -> JSONValue:
+def _get_schema(name: str) -> Schema:
     schema = json.loads((_get_schema_dir() / f"{name}.json").read_text())
     return schema
 
@@ -23,11 +20,11 @@ def _get_list_schema_files() -> list[Path]:
     return list(sorted(_get_schema_dir().glob("*.json")))
 
 
-def get_ome_schema() -> JSONValue:
+def get_ome_schema() -> Schema:
     return _get_schema("ome")
 
 
-def get_node_schema() -> JSONValue:
+def get_node_schema() -> Schema:
     return _get_schema("node")
 
 
