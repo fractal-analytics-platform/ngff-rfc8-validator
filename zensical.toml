@@ -61,10 +61,23 @@ toggle.name = "Switch to light mode"
 [project.plugins.mkdocs-autoapi]
 autoapi_dir = "python/src/"
 
-
 [project.plugins.mkdocstrings.handlers.python]
 paths = "python/src"
 inventories = [
     "https://docs.python.org/3/objects.inv",
-    "https://docs.pydantic.dev/latest/objects.inv",
+    "https://referencing.readthedocs.io/en/stable/objects.inv",
+    "https://python-jsonschema.readthedocs.io/en/stable/objects.inv",
 ]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+backlinks = "tree"
+docstring_style = "google"
+docstring_section_style = "spacy"
+show_source = true
+allow_inspection = true
+show_symbol_type_heading = true
+show_symbol_type_toc = false
+signature_crossrefs = true
+unwrap_annotated = true
+show_attribute_values = true
+inherited_members = true

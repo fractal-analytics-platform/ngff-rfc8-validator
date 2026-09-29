@@ -1,6 +1,6 @@
 import json
 
-from ngff_rfc8.load_schemas import _get_list_schema_files
+from ngff_rfc8.load_schemas import get_list_schema_files
 
 
 def _replace_refs(obj):
@@ -20,7 +20,7 @@ def main():
     schemas = {}
     root_schema = None
     defs = {}
-    for path in _get_list_schema_files():
+    for path in get_list_schema_files():
         schema = json.loads(path.read_text())
         if schema["$id"] == "ome.schema":
             root_schema = schema

@@ -1,44 +1,65 @@
 import json
+from functools import cache
 from pathlib import Path
-from typing import TypeAlias
 
 from referencing import Registry
 from referencing import Resource
 
-JSONValue: TypeAlias = (  # noqa: UP040
-    dict[str, "JSONValue"] | list["JSONValue"] | str | int | float | bool | None
-)
+from ._types import JSONSchemaType
+
+_SCHEMA_DIR = Path(__file__).parent / "schemas"
+"""
+Root directory of JSON Schemas.
+"""
 
 
-def get_schema_dir() -> Path:
-    """
-    Get root directory of JSON Schemas.
-    """
-    return Path(__file__).parent / "schemas"
-
-
-def get_schema(name: str) -> JSONValue:
+@cache
+def get_schema(name: str) -> JSONSchemaType:
     """
     Get JSON Schema named `name`.
 
     Arguments:
         name: Name of the schema (e.g. `node`, `collection`, `multiscale`, ...).
+
+    Returns:
+        The JSON Schema named `name`.
     """
-    schema = json.loads((get_schema_dir() / f"{name}.json").read_text())
+    schema = json.loads((_SCHEMA_DIR / f"{name}.json").read_text())
     return schema
 
 
-def _get_list_schema_files() -> list[Path]:
-    return list(sorted(get_schema_dir().glob("*.json")))
+@cache
+def get_list_schema_files() -> list[Path]:
+    """
+    Get list of JSON Schema files.
+
+    Returns:
+        List of JSON Schema paths.
+    """
+    return list(sorted(_SCHEMA_DIR.glob("*.json")))
 
 
-def get_ome_schema() -> JSONValue:
+@cache
+def get_ome_schema() -> JSONSchemaType:
+    """
+    Get `ome` JSON Schema.
+
+    Returns:
+        JSON Schema for `ome` data.
+    """
     return get_schema("ome")
 
 
+@cache
 def build_registry() -> Registry:
+    """
+    Build a JSON-referencing registry including all schemas from this package.
+
+    Returns:
+        The complete registry.
+    """
     registry = Registry()
-    for path in _get_list_schema_files():
+    for path in get_list_schema_files():
         schema = json.loads(path.read_text())
         registry = registry.with_resource(
             schema["$id"],
