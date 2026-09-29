@@ -32,7 +32,7 @@ jobs:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
 
-      - run: uv sync --frozen --all-extras
+      - run: uv sync --frozen --all-groups
 
       - run: uv run --no-sync --frozen pytest python/tests
 
@@ -80,4 +80,6 @@ jobs:
           enable-cache: true
           python-version: "3.13"
 
-      - run: uv run zensical build --strict
+      - run: uv sync --frozen --all-groups
+
+      - run: uv run --no-sync --frozen zensical build --strict
