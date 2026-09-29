@@ -10,21 +10,30 @@ JSONValue: TypeAlias = (  # noqa: UP040
 )
 
 
-def _get_schema_dir() -> Path:
+def get_schema_dir() -> Path:
+    """
+    Get root directory of JSON Schemas.
+    """
     return Path(__file__).parent / "schemas"
 
 
-def _get_schema(name: str) -> JSONValue:
-    schema = json.loads((_get_schema_dir() / f"{name}.json").read_text())
+def get_schema(name: str) -> JSONValue:
+    """
+    Get JSON Schema named `name`.
+
+    Arguments:
+        name: Name of the schema (e.g. `node`, `collection`, `multiscale`, ...).
+    """
+    schema = json.loads((get_schema_dir() / f"{name}.json").read_text())
     return schema
 
 
 def _get_list_schema_files() -> list[Path]:
-    return list(sorted(_get_schema_dir().glob("*.json")))
+    return list(sorted(get_schema_dir().glob("*.json")))
 
 
 def get_ome_schema() -> JSONValue:
-    return _get_schema("ome")
+    return get_schema("ome")
 
 
 def build_registry() -> Registry:

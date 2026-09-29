@@ -1,11 +1,18 @@
+"""
+Command-line script, exposed via the `ngff-rfc8-validate` entrypoint.
+"""
+
 import json
 import sys
 from pathlib import Path
 
-from .validate import validate_collection
+from ngff_rfc8.validate import validate_collection
 
 
-def cmd_validate():
+def cmd_validate() -> None:
+    """
+    Validate a JSON file.
+    """
     if len(sys.argv) != 2:
         sys.exit(f"Usage: {sys.argv[0]} <file>")
 
