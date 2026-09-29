@@ -112,8 +112,8 @@ def get_ome_property(data: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_collection(
-    *,
     data: dict[str, Any],
+    *,
     ignore_nodes: bool = False,
     verbose: bool = False,
 ) -> None:
