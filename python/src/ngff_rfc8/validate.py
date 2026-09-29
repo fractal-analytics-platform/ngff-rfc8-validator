@@ -6,7 +6,7 @@ from jsonschema import Draft202012Validator
 from jsonschema import ValidationError
 from jsonschema.exceptions import best_match
 
-from ngff_rfc8._types import JSONValue
+from ngff_rfc8._types import JSONType
 from ngff_rfc8.load_schemas import build_registry
 from ngff_rfc8.load_schemas import get_node_schema
 from ngff_rfc8.load_schemas import get_ome_schema
@@ -30,7 +30,7 @@ def _get_version_ok_path() -> list[str | int]:
     version is valid, which is then used below when filtering out some spurious error
     branches.
     """
-    allOf_array: list[JSONValue] = get_ome_schema()["properties"][_OME]["allOf"]
+    allOf_array: list[JSONType] = get_ome_schema()["properties"][_OME]["allOf"]
     version_ok_index = allOf_array.index({"$ref": "node.schema"})
     return [
         "properties",
@@ -55,7 +55,7 @@ def _get_oneOf_indices_dict() -> dict[RFC8NodeType, int]:
     `type` value.
     """
     node_schema = get_node_schema()
-    oneOf_array: list[JSONValue] = node_schema["oneOf"]
+    oneOf_array: list[JSONType] = node_schema["oneOf"]
     if len(oneOf_array) != 4:
         raise RuntimeError(
             "Unexpected length for the `oneOf` array of the `node` schema: "
