@@ -15,7 +15,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"'name' is a required property",
+        "'name' is a required property",
     ),
     (
         {
@@ -27,7 +27,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"'name' is a required property",
+        "'name' is a required property",
     ),
     (
         {
@@ -40,7 +40,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"'coordinateSystems' is a required property",
+        "'coordinateSystems' is a required property",
     ),
     (
         {
@@ -53,7 +53,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"{} is not of type 'array'",
+        "{} is not of type 'array'",
     ),
     (
         {
@@ -66,7 +66,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"[] should be non-empty",
+        "[] should be non-empty",
     ),
     (
         {
@@ -79,7 +79,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"[] should be non-empty",
+        "[] should be non-empty",
     ),
     (
         {
@@ -92,7 +92,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"'coordinateTransformations' is a required property",
+        "'coordinateTransformations' is a required property",
     ),
     (
         {
@@ -105,7 +105,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"'??' does not match '^[a-zA-Z0-9-_.]+$'",
+        "'??' does not match '^[a-zA-Z0-9-_.]+$'",
     ),
     (
         {
@@ -117,7 +117,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"'version' is a required property",
+        "'version' is a required property",
     ),
     (
         {
@@ -130,7 +130,7 @@ CASES = [
                 "nodes": [],
             }
         },
-        r"1234 is not of type 'string'",
+        "1234 is not of type 'string'",
     ),
 ]
 
