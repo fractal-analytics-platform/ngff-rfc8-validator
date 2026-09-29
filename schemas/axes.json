@@ -42,8 +42,6 @@
       "minContains": 2
     }
   ],
-  "minContains": 2,
-  "maxContains": 3,
   "$defs": {
     "axis": {
       "type": "object",
