@@ -133,6 +133,23 @@ DATA_MESSAGE_PAIRS = [
         },
         "1234 is not of type 'string'",
     ),
+    (
+        {
+            "ome": {
+                "version": "0.x",
+                "name": "root",
+                "type": "collection",
+                "nodes": [
+                    {
+                        "type": "multiscale",
+                        "name": "foo",
+                        "path": {"type": "json", "path": "./foo.json"},
+                    }
+                ],
+            }
+        },
+        "'attributes' is a required property",
+    ),
 ]
 
 
