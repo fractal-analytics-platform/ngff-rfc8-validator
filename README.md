@@ -53,6 +53,12 @@ import { validate } from '@fractal-analytics-platform/ngff-rfc8-validator';
 validate(data);
 ```
 
+## Considerations about the schema structure
+
+The [main node schema](./schemas/node.json) needs to discriminate between various subschema according to the `type` field. The most natural approach would be using the `oneOf` keyword. Unfortunately, this solution tends to produce a large number of misleading errors, referring to branches which don't match the specified `type`. For this reason we produced an equivalent schema using a combination of `allOf` and `if`/`then` keywords. This resulted in a reduction of the number of errors.
+
+The same logic has been applied to [collection schema](./schemas/collection.json) and [multiscale schema](./schemas/multiscale.json) to handle the `nodes`/`path` switch.
+
 ## Development
 
 Python:
