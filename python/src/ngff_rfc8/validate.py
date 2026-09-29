@@ -127,6 +127,15 @@ def validate_collection(
     ignore_nodes: bool = False,
     verbose: bool = False,
 ) -> None:
+    """
+    Rich handling of RFC8 validation and its error branches.
+
+    When the available error branches correspond to one the `oneOf` branches (based on the
+    node type), we filter suberrors through `_is_spurious_error` and then identify the
+    best match via `jsonschema.best_match`. When this advanced error handling is not
+    possible, we fall-back on the `jsonschema.Draft202012Validator.validate` method.
+    """
+
     ome_data = get_ome_property(data)
     if ignore_nodes and "nodes" in ome_data.keys():
         ome_data["nodes"] = []
