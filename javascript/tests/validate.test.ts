@@ -63,12 +63,10 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome',
+            schemaPath: '#/required',
             keyword: 'required',
-            message: "must have required property 'name'",
-            params: {
-              missingProperty: 'name'
-            },
-            schemaPath: '#/oneOf/0/required'
+            params: { missingProperty: 'name' },
+            message: "must have required property 'name'"
           }
         ])
       })
@@ -84,12 +82,10 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome/id',
+            schemaPath: '#/properties/id/pattern',
             keyword: 'pattern',
-            message: 'must match pattern "^[a-zA-Z0-9-_.]+$"',
-            params: {
-              pattern: '^[a-zA-Z0-9-_.]+$'
-            },
-            schemaPath: '#/oneOf/0/properties/id/pattern'
+            params: { pattern: '^[a-zA-Z0-9-_.]+$' },
+            message: 'must match pattern "^[a-zA-Z0-9-_.]+$"'
           }
         ])
       })
@@ -112,12 +108,10 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome/attributes',
+            schemaPath: '#/properties/attributes/type',
             keyword: 'type',
-            message: 'must be object',
-            params: {
-              type: 'object'
-            },
-            schemaPath: '#/oneOf/0/properties/attributes/type'
+            params: { type: 'object' },
+            message: 'must be object'
           }
         ])
       })
