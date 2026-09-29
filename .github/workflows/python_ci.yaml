@@ -2,9 +2,9 @@ name: Python CI
 
 on:
   push:
-    branches: ["main", "json-schema-if-else-instead-of-oneOf"]
+    branches: ["main"]
   pull_request:
-    branches: ["main", "json-schema-if-else-instead-of-oneOf"]
+    branches: ["main"]
 
 
 permissions: {}
