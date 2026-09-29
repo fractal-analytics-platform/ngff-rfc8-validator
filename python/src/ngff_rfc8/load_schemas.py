@@ -4,27 +4,27 @@ from pathlib import Path
 from referencing import Registry
 from referencing import Resource
 
-from ngff_rfc8._types import Schema
+from ngff_rfc8._types import JSONSchemaType
 
 
 def _get_schema_dir() -> Path:
     return Path(__file__).parent / "schemas"
 
 
-def _get_schema(name: str) -> Schema:
-    schema = json.loads((_get_schema_dir() / f"{name}.json").read_text())
-    return schema
-
-
 def _get_list_schema_files() -> list[Path]:
     return list(sorted(_get_schema_dir().glob("*.json")))
 
 
-def get_ome_schema() -> Schema:
+def _get_schema(name: str) -> JSONSchemaType:
+    schema = json.loads((_get_schema_dir() / f"{name}.json").read_text())
+    return schema
+
+
+def get_ome_schema() -> JSONSchemaType:
     return _get_schema("ome")
 
 
-def get_node_schema() -> Schema:
+def get_node_schema() -> JSONSchemaType:
     return _get_schema("node")
 
 
