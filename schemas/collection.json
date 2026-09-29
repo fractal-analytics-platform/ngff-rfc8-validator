@@ -28,7 +28,7 @@
     "type",
     "name"
   ],
-  "oneOf": [
+  "allOf": [
     {
       "properties": {
         "nodes": {
@@ -36,20 +36,32 @@
           "items": {
             "$ref": "node.schema"
           }
-        }
-      },
-      "required": [
-        "nodes"
-      ]
-    },
-    {
-      "properties": {
+        },
         "path": {
           "$ref": "path.schema"
         }
-      },
-      "required": [
-        "path"
+      }
+    },
+    {
+      "not": {
+        "required": [
+          "nodes",
+          "path"
+        ]
+      }
+    },
+    {
+      "oneOf": [
+        {
+          "required": [
+            "nodes"
+          ]
+        },
+        {
+          "required": [
+            "path"
+          ]
+        }
       ]
     }
   ]
