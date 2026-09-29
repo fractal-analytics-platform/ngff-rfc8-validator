@@ -27,7 +27,7 @@ function getOme(data: any) {
 }
 
 function validateSchema(data: any) {
-  const ajv = new Ajv({ allErrors: true, strict: false });
+  const ajv = new Ajv({ allErrors: true, strict: true });
   const validate = ajv.compile(schema);
   const valid = validate(data);
   if (!valid) {

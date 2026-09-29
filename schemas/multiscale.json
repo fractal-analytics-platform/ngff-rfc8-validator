@@ -28,15 +28,6 @@
       "required": [
         "coordinateSystems"
       ]
-    },
-    "nodes": {
-      "type": "array",
-      "items": {
-        "$ref": "node.schema"
-      }
-    },
-    "path": {
-      "$ref": "path.schema"
     }
   },
   "required": [
@@ -44,15 +35,40 @@
     "name",
     "attributes"
   ],
-  "oneOf": [
+  "allOf": [
     {
-      "required": [
-        "nodes"
-      ]
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "node.schema"
+          }
+        },
+        "path": {
+          "$ref": "path.schema"
+        }
+      }
     },
     {
-      "required": [
-        "path"
+      "not": {
+        "required": [
+          "nodes",
+          "path"
+        ]
+      }
+    },
+    {
+      "oneOf": [
+        {
+          "required": [
+            "nodes"
+          ]
+        },
+        {
+          "required": [
+            "path"
+          ]
+        }
       ]
     }
   ]

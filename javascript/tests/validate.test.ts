@@ -63,12 +63,10 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome',
+            schemaPath: '#/required',
             keyword: 'required',
-            message: "must have required property 'name'",
-            params: {
-              missingProperty: 'name'
-            },
-            schemaPath: '#/oneOf/0/required'
+            params: { missingProperty: 'name' },
+            message: "must have required property 'name'"
           }
         ])
       })
@@ -84,12 +82,10 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome/id',
+            schemaPath: '#/properties/id/pattern',
             keyword: 'pattern',
-            message: 'must match pattern "^[a-zA-Z0-9-_.]+$"',
-            params: {
-              pattern: '^[a-zA-Z0-9-_.]+$'
-            },
-            schemaPath: '#/oneOf/0/properties/id/pattern'
+            params: { pattern: '^[a-zA-Z0-9-_.]+$' },
+            message: 'must match pattern "^[a-zA-Z0-9-_.]+$"'
           }
         ])
       })
@@ -112,12 +108,10 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome/attributes',
+            schemaPath: '#/properties/attributes/type',
             keyword: 'type',
-            message: 'must be object',
-            params: {
-              type: 'object'
-            },
-            schemaPath: '#/oneOf/0/properties/attributes/type'
+            params: { type: 'object' },
+            message: 'must be object'
           }
         ])
       })
@@ -687,21 +681,17 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome/nodes/0',
+            schemaPath: '#/allOf/2/oneOf/0/required',
             keyword: 'required',
-            message: "must have required property 'nodes'",
-            params: {
-              missingProperty: 'nodes'
-            },
-            schemaPath: '#/oneOf/0/required'
+            params: { missingProperty: 'nodes' },
+            message: "must have required property 'nodes'"
           },
           {
             instancePath: '/ome/nodes/0',
+            schemaPath: '#/allOf/2/oneOf/1/required',
             keyword: 'required',
-            message: "must have required property 'path'",
-            params: {
-              missingProperty: 'path'
-            },
-            schemaPath: '#/oneOf/1/required'
+            params: { missingProperty: 'path' },
+            message: "must have required property 'path'"
           }
         ])
       })
@@ -750,12 +740,10 @@ describe('Validate', () => {
         schemaErrors: expect.arrayContaining([
           {
             instancePath: '/ome/nodes/0',
-            keyword: 'oneOf',
-            message: 'must match exactly one schema in oneOf',
-            params: {
-              passingSchemas: [0, 1]
-            },
-            schemaPath: '#/oneOf'
+            schemaPath: '#/allOf/1/not',
+            keyword: 'not',
+            params: {},
+            message: 'must NOT be valid'
           }
         ])
       })

@@ -3,50 +3,92 @@
   "$id": "node.schema",
   "title": "Node",
   "description": "OME Node",
-  "oneOf": [
+  "type": "object",
+  "allOf": [
     {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "not": {
-            "anyOf": [
-              {"const": "collection"},
-              {"const": "singlescale"},
-              {"const": "multiscale"}
-            ]
+      "if": {
+        "properties": {
+          "type": {
+            "const": "collection"
           }
-        },
-        "id": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9-_.]+$"
-        },
-        "name": {
-          "type": "string"
-        },
-        "nodes": {
-          "type": "array",
-          "items": {
-            "$ref": "node.schema"
-          }
-        },
-        "attributes": {
-          "type": "object"
         }
       },
-      "required": [
-        "type",
-        "name"
-      ]
+      "then": {
+        "$ref": "collection.schema"
+      }
     },
     {
-      "$ref": "collection.schema"
+      "if": {
+        "properties": {
+          "type": {
+            "const": "multiscale"
+          }
+        }
+      },
+      "then": {
+        "$ref": "multiscale.schema"
+      }
     },
     {
-      "$ref": "singlescale.schema"
+      "if": {
+        "properties": {
+          "type": {
+            "const": "singlescale"
+          }
+        }
+      },
+      "then": {
+        "$ref": "singlescale.schema"
+      }
     },
     {
-      "$ref": "multiscale.schema"
+      "if": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "not": {
+              "anyOf": [
+                {
+                  "const": "collection"
+                },
+                {
+                  "const": "singlescale"
+                },
+                {
+                  "const": "multiscale"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "nodes": {
+            "type": "array",
+            "items": {
+              "$ref": "node.schema"
+            }
+          },
+          "attributes": {
+            "type": "object"
+          }
+        }
+      }
     }
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-_.]+$"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "name"
   ]
 }
