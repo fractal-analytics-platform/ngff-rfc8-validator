@@ -1,12 +1,91 @@
+from functools import cache
 from typing import Any
 
 from jsonschema import Draft202012Validator
 from jsonschema import ValidationError
-from jsonschema import validate
 from jsonschema.exceptions import best_match
 
-from .load_schemas import build_registry
-from .load_schemas import get_ome_schema
+from ngff_rfc8.load_schemas import build_registry
+from ngff_rfc8.load_schemas import get_node_schema
+from ngff_rfc8.load_schemas import get_ome_schema
+
+_OME = "ome"
+_COLLECTION = "collection"
+_SINGLESCALE = "singlescale"
+_MULTISCALE = "multiscale"
+_UNKNOWN = "__unknown_node_type__"
+
+_OME_SCHEMA = get_ome_schema()
+
+
+@cache
+def _get_version_ok_path() -> list[str | int]:
+    """
+    The `ome` JSON schema has an `allOf` array which covers two options, depending on
+    whether a valid `version` is present.
+    This function returns the common part of an error path shared by all cases where the
+    version is valid, which is then used below when filtering out some spurious error
+    branches.
+    """
+    allOf_array = _OME_SCHEMA["properties"][_OME]["allOf"]
+    version_ok_index = allOf_array.index({"$ref": "node.schema"})
+    return [
+        "properties",
+        _OME,
+        "allOf",
+        version_ok_index,
+        "oneOf",
+    ]
+
+
+@cache
+def _get_oneOf_indices_dict() -> dict[str, int]:
+    """
+    The `node` JSON schema has a top-level `oneOf`, which covers four possible `type`
+    values: collection, multiscale, singlescale, a different type. This function finds
+    their indices in the array, which are then used below when filtering out some spurious
+    `oneOf`-related error branches.
+
+    NOTE: The usage of OpenAPI `discriminator` keyword (see e.g.
+    https://swagger.io/specification/v3.2/#discriminator-object) would make this logic
+    redundant, as we would only attempt validation with the schema corresponding to the
+    `type` value.
+    """
+    node_schema = get_node_schema()
+    oneOf_array: list[dict[str, Any]] = node_schema["oneOf"]
+    if len(oneOf_array) != 4:
+        raise RuntimeError(
+            "Unexpected length for the `oneOf` array of the `node` schema: "
+            f"{len(oneOf_array)}"
+        )
+    node_indices: dict[str, int] = {
+        _COLLECTION: oneOf_array.index({"$ref": f"{_COLLECTION}.schema"}),
+        _SINGLESCALE: oneOf_array.index({"$ref": f"{_SINGLESCALE}.schema"}),
+        _MULTISCALE: oneOf_array.index({"$ref": f"{_MULTISCALE}.schema"}),
+    }
+    last_index = (set(range(4)) - set(node_indices.keys())).pop()
+    node_indices[_UNKNOWN] = last_index
+    return node_indices
+
+
+def _is_spurious_error(*, error: ValidationError, ome_type: str, verbose: bool) -> bool:
+    """
+    Determine whether this is a spurious error, based on the OME type and on the path of
+    the error branch.
+    """
+    absolute_schema_path = list(error.absolute_schema_path)
+    if (
+        absolute_schema_path[:5] == _get_version_ok_path()
+        and absolute_schema_path[5] != _get_oneOf_indices_dict()[ome_type]
+    ):
+        if verbose:
+            print(f"[_is_spurious_error] Spurious error branch {error=}, {ome_type=}")
+        return True
+    else:
+        if verbose:
+            print(f"[_is_spurious_error] Valid error branch {error=}, {ome_type=}")
+        return False
+
 
 VALIDATOR = Draft202012Validator(
     schema=get_ome_schema(),
@@ -14,23 +93,15 @@ VALIDATOR = Draft202012Validator(
 )
 
 
-class CustomError(ValidationError):
-    def __str__(self):
-        return f"{self.json_path}: {self.message}"
-
-    def __repr__(self):
-        return f"{self.json_path}: {self.message}"
-
-
 def get_ome_property(data: dict[str, Any]) -> dict[str, Any]:
-    if "ome" in data.keys() and isinstance(data["ome"], dict):
-        return data["ome"]
+    if _OME in data.keys() and isinstance(data[_OME], dict):
+        return data[_OME]
     elif (
         "attributes" in data.keys()
-        and "ome" in data["attributes"].keys()
-        and isinstance(data["attributes"]["ome"], dict)
+        and _OME in data["attributes"].keys()
+        and isinstance(data["attributes"][_OME], dict)
     ):
-        return data["attributes"]["ome"]
+        return data["attributes"][_OME]
     else:
         error = (
             "The document must include a 'ome' object property, "
@@ -40,77 +111,59 @@ def get_ome_property(data: dict[str, Any]) -> dict[str, Any]:
         raise ValueError(error)
 
 
-_COLLECTION = "collection"
-_SINGLESCALE = "singlescale"
-_MULTISCALE = "multiscale"
-_TYPES = {_COLLECTION, _SINGLESCALE, _MULTISCALE}
-_SCHEMA_PATH_PREFIX = [
-    "properties",
-    "ome",
-    "allOf",
-    1,  # FIXME: Re-compute?
-    "oneOf",
-]
-
-# FIXME: Re-compute these indices (based on the actual schema)?
-_INDEX_TYPE_OTHER = 0
-_INDEX_TYPE_COLLECTION = 1
-_INDEX_TYPE_SINGLESCALE = 2
-_INDEX_TYPE_MULTISCALE = 3
-
-
-def _include_error(error: ValidationError, ome_type: str) -> bool:
-    absolute_schema_path = list(error.absolute_schema_path)
-    if absolute_schema_path[:5] == _SCHEMA_PATH_PREFIX:
-        oneOf_option = absolute_schema_path[5]
-        if (
-            (ome_type not in _TYPES and oneOf_option != _INDEX_TYPE_OTHER)
-            or (ome_type == _COLLECTION and oneOf_option != _INDEX_TYPE_COLLECTION)
-            or (ome_type == _SINGLESCALE and oneOf_option != _INDEX_TYPE_SINGLESCALE)
-            or (ome_type == _MULTISCALE and oneOf_option != _INDEX_TYPE_MULTISCALE)
-        ):
-            return False
-    else:
-        print("THIS WAS DIFFERENT", absolute_schema_path)
-    return True
-
-
 def validate_collection(
+    *,
     data: dict[str, Any],
     ignore_nodes: bool = False,
+    verbose: bool = False,
 ) -> None:
     ome_data = get_ome_property(data)
-    instance_type = ome_data.get("type", None)
-
     if ignore_nodes and "nodes" in ome_data.keys():
         ome_data["nodes"] = []
+    ome_type = ome_data.get("type", _UNKNOWN)
 
-    top_level_errors = list(VALIDATOR.iter_errors({"ome": ome_data}))
+    if verbose:
+        print(f"[validate_collection] {ome_data=}")
+        print(f"[validate_collection] {ome_type=}")
+
+    top_level_errors = list(VALIDATOR.iter_errors({_OME: ome_data}))
+    if verbose:
+        print(f"[validate_collection] {len(top_level_errors)=}")
     match len(top_level_errors):
         case 0:
+            if verbose:
+                print("[validate_collection] No errors.")
             return
         case 1:
             top_level_error = top_level_errors[0]
+            if verbose:
+                print(f"[validate_collection] Single top-level error: {top_level_error}.")
             suberrors = [
                 suberror
                 for suberror in top_level_error.context
-                if _include_error(suberror, ome_type=instance_type)
+                if not _is_spurious_error(
+                    error=suberror,
+                    ome_type=ome_type,
+                    verbose=verbose,
+                )
             ]
+            if verbose:
+                print(f"[validate_collection] {len(suberrors)=}")
+                for ind, suberror in enumerate(suberrors):
+                    print(f"[validate_collection] {ind}, {suberror}")
             match len(suberrors):
                 case 0:
                     raise top_level_error
                 case _:
-                    raise best_match(suberrors)
+                    best_exception = best_match(suberrors)
+                    if verbose:
+                        print(f"[validate_collection] best match: {best_exception}")
+                    raise best_exception
         case _:
-            raise NotImplementedError("More than one top-level error.")
-
-    try:
-        validate(
-            instance={"ome": ome_data},
-            schema=get_ome_schema(),
-            registry=build_registry(),
-        )
-    except ValidationError as e:
-        print(e.context)
-    except Exception as generic_exception:
-        raise generic_exception
+            # Fall-back on the standard validate, to avoid handling this complex case
+            if verbose:
+                print(
+                    "[validate_collection] More than one top-level error, fall-back on "
+                    "upstream validation."
+                )
+            VALIDATOR.validate({_OME: ome_data})

@@ -27,6 +27,10 @@ def get_ome_schema() -> JSONValue:
     return _get_schema("ome")
 
 
+def get_node_schema() -> JSONValue:
+    return _get_schema("node")
+
+
 def build_registry() -> Registry:
     registry = Registry()
     for path in _get_list_schema_files():

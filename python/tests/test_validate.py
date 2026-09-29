@@ -36,7 +36,7 @@ def test_zarr_valid_inline():
 def test_missing_ome():
     with pytest.raises(
         ValueError,
-        match="must include a 'ome' property",
+        match="must include a 'ome' object property",
     ):
         validate_collection({})
 
