@@ -48,6 +48,8 @@ To include the JavaScript package in other projects, install the library from th
 npm install https://github.com/fractal-analytics-platform/ngff-rfc8-validator/releases/download/v0.0.1/ngff-rfc8-validator-v0.0.1.tgz
 ```
 
+> Starting from npm 12, you will also need to specify the flag `--allow-remote=all`, to allow npm installing from an URL. If you are installing from a package.json file you can use `--allow-remote=root` instead. See https://docs.npmjs.com/cli/v12/using-npm/config#allow-remote
+
 Then, import the validate function:
 
 ```javascript
