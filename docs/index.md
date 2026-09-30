@@ -3,7 +3,15 @@
 Proof of concept of validation tools for NGFF RFC-8 collections based on JSON Schemas - see https://ngff.openmicroscopy.org/rfc/8/index.html.
 For more details, see the [repository README file](https://github.com/fractal-analytics-platform/ngff-rfc8-validator/blob/main/README.md).
 
+This repository includes:
+
+1. Examples of JSON Schemas for RFC-8.
+2. A minimal Python package for collection validation (see [reference](./autoapi/ngff_rfc8)).
+3. A minimal JavaScript package for collection validation.
+
+
 > ⚠️ **WARNING**: This project is a proof of concept. It is experimental, unstable, and not intended for production use.
+
 
 ## Contributors and license
 
