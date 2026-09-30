@@ -72,7 +72,7 @@ inventories = [
 [project.plugins.mkdocstrings.handlers.python.options]
 backlinks = "tree"
 docstring_style = "google"
-docstring_section_style = "spacy"
+docstring_section_style = "table"
 show_source = true
 allow_inspection = true
 show_symbol_type_heading = true
