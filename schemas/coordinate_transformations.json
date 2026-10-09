@@ -47,44 +47,160 @@
           ]
         },
         {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/identity"
-            },
-            {
-              "$ref": "#/$defs/mapAxis"
-            },
-            {
-              "$ref": "#/$defs/projectAxis"
-            },
-            {
-              "$ref": "#/$defs/scale"
-            },
-            {
-              "$ref": "#/$defs/translation"
-            },
-            {
-              "$ref": "#/$defs/affine"
-            },
-            {
-              "$ref": "#/$defs/rotation"
-            },
-            {
-              "$ref": "#/$defs/bijection"
-            },
-            {
-              "$ref": "#/$defs/sequence"
-            },
-            {
-              "$ref": "#/$defs/byDimension"
-            },
-            {
-              "$ref": "#/$defs/displacements"
-            },
-            {
-              "$ref": "#/$defs/coordinates"
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "identity"
+              }
             }
-          ]
+          },
+          "then": {
+            "$ref": "#/$defs/identity"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "mapAxis"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/mapAxis"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "projectAxis"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/projectAxis"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "scale"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/scale"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "translation"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/translation"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "affine"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/affine"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "rotation"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/rotation"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "bijection"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/bijection"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "sequence"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/sequence"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "byDimension"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/byDimension"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "displacements"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/displacements"
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "coordinates"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/coordinates"
+          }
         }
       ]
     },
@@ -161,12 +277,19 @@
         },
         {
           "anyOf": [
-            {"required": ["droppedInputs"]},
-            {"required": ["createdOutputs"]}
+            {
+              "required": [
+                "droppedInputs"
+              ]
+            },
+            {
+              "required": [
+                "createdOutputs"
+              ]
+            }
           ]
         }
       ]
-
     },
     "scale": {
       "type": "object",
@@ -275,25 +398,53 @@
                   "type": "array",
                   "minItems": 2,
                   "maxItems": 2,
-                  "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } }
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
                 },
                 {
                   "type": "array",
                   "minItems": 3,
                   "maxItems": 3,
-                  "items": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number" } }
+                  "items": {
+                    "type": "array",
+                    "minItems": 3,
+                    "maxItems": 3,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
                 },
                 {
                   "type": "array",
                   "minItems": 4,
                   "maxItems": 4,
-                  "items": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" } }
+                  "items": {
+                    "type": "array",
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
                 },
                 {
                   "type": "array",
                   "minItems": 5,
                   "maxItems": 5,
-                  "items": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "type": "number" } }
+                  "items": {
+                    "type": "array",
+                    "minItems": 5,
+                    "maxItems": 5,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
                 }
               ]
             }
@@ -320,7 +471,8 @@
         }
       },
       "required": [
-        "forward", "inverse"
+        "forward",
+        "inverse"
       ]
     },
     "sequence": {
@@ -328,7 +480,9 @@
       "description": "A sequence of transformations applied in order.",
       "type": "object",
       "properties": {
-        "type": { "const": "sequence" },
+        "type": {
+          "const": "sequence"
+        },
         "transformations": {
           "type": "array",
           "items": {
@@ -345,7 +499,9 @@
       "title": "By Dimension Transformation",
       "description": "A set of transformations applied independently to each dimension.",
       "properties": {
-        "type": { "const": "byDimension" },
+        "type": {
+          "const": "byDimension"
+        },
         "transformations": {
           "type": "array",
           "items": {
@@ -386,14 +542,20 @@
       "title": "Displacement Field Transformation",
       "description": "Transformation defined by a displacement field stored in a zarr array.",
       "properties": {
-        "type": { "const": "displacements" },
+        "type": {
+          "const": "displacements"
+        },
         "path": {
           "type": "string",
           "description": "Path to the zarr array containing the displacement field."
         },
         "interpolation": {
           "type": "string",
-          "enum": ["nearest", "linear", "cubic"],
+          "enum": [
+            "nearest",
+            "linear",
+            "cubic"
+          ],
           "default": "linear",
           "description": "Interpolation method to use when applying the displacement field."
         }
@@ -407,14 +569,20 @@
       "title": "Coordinate Field Transformation",
       "description": "Transformation defined by a coordinate field stored in a zarr array.",
       "properties": {
-        "type": { "const": "coordinates" },
+        "type": {
+          "const": "coordinates"
+        },
         "path": {
           "type": "string",
           "description": "Path to the zarr array containing the coordinate field."
         },
         "interpolation": {
           "type": "string",
-          "enum": ["nearest", "linear", "cubic"],
+          "enum": [
+            "nearest",
+            "linear",
+            "cubic"
+          ],
           "default": "linear",
           "description": "Interpolation method to use when applying the coordinate field."
         }
