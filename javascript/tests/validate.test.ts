@@ -749,4 +749,142 @@ describe('Validate', () => {
       })
     );
   });
+
+  it('invalid axes: type space maxContains 3', () => {
+    expect(() =>
+      validate({
+        ome: {
+          type: 'multiscale',
+          name: 'foo',
+          version: '0.x',
+          nodes: [],
+          attributes: {
+            labels: {},
+            coordinateSystems: [
+              {
+                id: 'x',
+                axes: [
+                  {
+                    name: 'x',
+                    type: 'space',
+                    unit: 'micrometer'
+                  },
+                  {
+                    name: 'y',
+                    type: 'space',
+                    unit: 'micrometer'
+                  },
+                  {
+                    name: 'z',
+                    type: 'space',
+                    unit: 'micrometer'
+                  },
+                  {
+                    name: 'w',
+                    type: 'space',
+                    unit: 'micrometer'
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      })
+    ).toThrow(
+      expect.objectContaining({
+        message: 'JSON schema validation failed',
+        schemaErrors: expect.arrayContaining([
+          {
+            instancePath: '/ome/attributes/coordinateSystems/0/axes',
+            schemaPath: '#/allOf/0/then/contains',
+            keyword: 'contains',
+            params: { minContains: 2, maxContains: 3 },
+            message: 'must contain at least 2 and no more than 3 valid item(s)'
+          }
+        ])
+      })
+    );
+  });
+
+  it('invalid axes: type space minContains 2', () => {
+    expect(() =>
+      validate({
+        ome: {
+          type: 'multiscale',
+          name: 'foo',
+          version: '0.x',
+          nodes: [],
+          attributes: {
+            labels: {},
+            coordinateSystems: [
+              {
+                id: 'x',
+                axes: [
+                  {
+                    name: 'x',
+                    type: 'space',
+                    unit: 'micrometer'
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      })
+    ).toThrow(
+      expect.objectContaining({
+        message: 'JSON schema validation failed',
+        schemaErrors: expect.arrayContaining([
+          {
+            instancePath: '/ome/attributes/coordinateSystems/0/axes',
+            schemaPath: '#/allOf/0/then/contains',
+            keyword: 'contains',
+            params: { minContains: 2, maxContains: 3 },
+            message: 'must contain at least 2 and no more than 3 valid item(s)'
+          }
+        ])
+      })
+    );
+  });
+
+  it('invalid axes: type array minContains 2', () => {
+    expect(() =>
+      validate({
+        ome: {
+          type: 'multiscale',
+          name: 'foo',
+          version: '0.x',
+          nodes: [],
+          attributes: {
+            labels: {},
+            coordinateSystems: [
+              {
+                id: 'x',
+                axes: [
+                  {
+                    name: 'x',
+                    type: 'array',
+                    unit: 'micrometer'
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      })
+    ).toThrow(
+      expect.objectContaining({
+        message: 'JSON schema validation failed',
+        schemaErrors: expect.arrayContaining([
+          {
+            instancePath: '/ome/attributes/coordinateSystems/0/axes',
+            schemaPath: '#/allOf/1/then/contains',
+            keyword: 'contains',
+            params: { minContains: 2 },
+            message: 'must contain at least 2 valid item(s)'
+          }
+        ])
+      })
+    );
+  });
 });
