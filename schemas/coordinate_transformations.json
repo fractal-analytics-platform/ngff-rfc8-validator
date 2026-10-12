@@ -53,7 +53,8 @@
               "type": {
                 "const": "identity"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/identity"
@@ -66,7 +67,8 @@
               "type": {
                 "const": "mapAxis"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/mapAxis"
@@ -79,7 +81,8 @@
               "type": {
                 "const": "projectAxis"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/projectAxis"
@@ -92,7 +95,8 @@
               "type": {
                 "const": "scale"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/scale"
@@ -105,7 +109,8 @@
               "type": {
                 "const": "translation"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/translation"
@@ -118,7 +123,8 @@
               "type": {
                 "const": "affine"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/affine"
@@ -131,7 +137,8 @@
               "type": {
                 "const": "rotation"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/rotation"
@@ -144,7 +151,8 @@
               "type": {
                 "const": "bijection"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/bijection"
@@ -157,7 +165,8 @@
               "type": {
                 "const": "sequence"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/sequence"
@@ -170,7 +179,8 @@
               "type": {
                 "const": "byDimension"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/byDimension"
@@ -183,7 +193,8 @@
               "type": {
                 "const": "displacements"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/displacements"
@@ -196,7 +207,8 @@
               "type": {
                 "const": "coordinates"
               }
-            }
+            },
+            "required": ["type"]
           },
           "then": {
             "$ref": "#/$defs/coordinates"
