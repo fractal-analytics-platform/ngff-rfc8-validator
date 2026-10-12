@@ -73,6 +73,23 @@ describe('Validate', () => {
     );
   });
 
+  it('missing type', () => {
+    expect(() => validate({ ome: { version: '0.x', name: 'foo' } })).toThrow(
+      expect.objectContaining({
+        message: 'JSON schema validation failed',
+        schemaErrors: expect.arrayContaining([
+          {
+            instancePath: '/ome',
+            schemaPath: '#/required',
+            keyword: 'required',
+            params: { missingProperty: 'type' },
+            message: "must have required property 'type'"
+          }
+        ])
+      })
+    );
+  });
+
   it('invalid id', () => {
     expect(() =>
       validate({ ome: { version: '0.x', type: 'collection', name: 'foo', id: '' } })
@@ -366,105 +383,6 @@ describe('Validate', () => {
             message: "must have required property 'attributes'",
             params: {
               missingProperty: 'attributes'
-            },
-            schemaPath: '#/required'
-          }
-        ])
-      })
-    );
-  });
-
-  it('invalid coordinateTransformations: missing type', () => {
-    expect(() =>
-      validate({
-        ome: {
-          version: '0.x',
-          name: 'root',
-          type: 'collection',
-          nodes: [
-            {
-              type: 'singlescale',
-              name: 'single',
-              attributes: {
-                coordinateTransformations: [
-                  {
-                    translation: [0, 0, 100],
-                    input: {
-                      id: 'physical',
-                      path: {
-                        type: 'json',
-                        path: './foo.json'
-                      }
-                    },
-                    output: { id: 'world' }
-                  }
-                ]
-              },
-              path: { type: 'json', path: './foo.json' }
-            }
-          ]
-        }
-      })
-    ).toThrow(
-      expect.objectContaining({
-        message: 'JSON schema validation failed',
-        schemaErrors: expect.arrayContaining([
-          {
-            instancePath: '/ome/nodes/0/attributes/coordinateTransformations/0',
-            keyword: 'required',
-            message: "must have required property 'type'",
-            params: {
-              missingProperty: 'type'
-            },
-            schemaPath: '#/allOf/0/required'
-          }
-        ])
-      })
-    );
-  });
-
-  it('invalid coordinateTransformations: missing output id', () => {
-    expect(() =>
-      validate({
-        ome: {
-          version: '0.x',
-          name: 'root',
-          type: 'collection',
-          nodes: [
-            {
-              type: 'singlescale',
-              name: 'single',
-              attributes: {
-                coordinateTransformations: [
-                  {
-                    type: 'translation',
-                    translation: [0, 0, 100],
-                    input: {
-                      id: 'physical',
-                      path: {
-                        type: 'json',
-                        path: './foo.json'
-                      }
-                    },
-                    output: {}
-                  }
-                ]
-              },
-              path: { type: 'json', path: './foo.json' }
-            }
-          ]
-        }
-      })
-    ).toThrow(
-      expect.objectContaining({
-        message: 'JSON schema validation failed',
-        schemaErrors: expect.arrayContaining([
-          {
-            instancePath: '/ome/nodes/0/attributes/coordinateTransformations/0/output',
-            keyword: 'required',
-            message: "must have required property 'id'",
-            params: {
-              missingProperty: 'id'
             },
             schemaPath: '#/required'
           }

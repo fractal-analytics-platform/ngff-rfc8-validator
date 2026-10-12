@@ -11,35 +11,73 @@
     "$ref": "#/$defs/axis"
   },
   "$comment": "Ensure that there exist at most three space axes",
-  "oneOf": [
+  "contains": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string"
+      }
+    }
+  },
+  "allOf": [
     {
-      "contains": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "const": "space"
-          }
-        },
-        "required": [
-          "type"
-        ]
+      "if": {
+        "contains": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "space"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
       },
-      "minContains": 2,
-      "maxContains": 3
+      "then": {
+        "contains": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "space"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "minContains": 2,
+        "maxContains": 3
+      }
     },
     {
-      "contains": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "const": "array"
-          }
-        },
-        "required": [
-          "type"
-        ]
+      "if": {
+        "contains": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "array"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
       },
-      "minContains": 2
+      "then": {
+        "contains": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "array"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "minContains": 2
+      }
     }
   ],
   "$defs": {

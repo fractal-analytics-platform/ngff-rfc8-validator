@@ -11,7 +11,10 @@
           "type": {
             "const": "collection"
           }
-        }
+        },
+        "required": [
+          "type"
+        ]
       },
       "then": {
         "$ref": "collection.schema"
@@ -23,7 +26,10 @@
           "type": {
             "const": "multiscale"
           }
-        }
+        },
+        "required": [
+          "type"
+        ]
       },
       "then": {
         "$ref": "multiscale.schema"
@@ -35,7 +41,10 @@
           "type": {
             "const": "singlescale"
           }
-        }
+        },
+        "required": [
+          "type"
+        ]
       },
       "then": {
         "$ref": "singlescale.schema"
@@ -60,7 +69,10 @@
               ]
             }
           }
-        }
+        },
+        "required": [
+          "type"
+        ]
       },
       "then": {
         "type": "object",
@@ -74,7 +86,10 @@
           "attributes": {
             "type": "object"
           }
-        }
+        },
+        "required": [
+          "type"
+        ]
       }
     }
   ],
