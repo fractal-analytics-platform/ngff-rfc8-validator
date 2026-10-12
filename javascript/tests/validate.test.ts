@@ -73,6 +73,23 @@ describe('Validate', () => {
     );
   });
 
+  it('missing type', () => {
+    expect(() => validate({ ome: { version: '0.x', name: 'foo' } })).toThrow(
+      expect.objectContaining({
+        message: 'JSON schema validation failed',
+        schemaErrors: expect.arrayContaining([
+          {
+            instancePath: '/ome',
+            schemaPath: '#/required',
+            keyword: 'required',
+            params: { missingProperty: 'type' },
+            message: "must have required property 'type'"
+          }
+        ])
+      })
+    );
+  });
+
   it('invalid id', () => {
     expect(() =>
       validate({ ome: { version: '0.x', type: 'collection', name: 'foo', id: '' } })
