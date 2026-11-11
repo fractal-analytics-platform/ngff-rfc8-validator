@@ -58,6 +58,6 @@ jobs:
 
       - run: uv build --wheel
 
-      - run: unzip dist/ngff_rfc8-0.0.3-py3-none-any.whl
+      - run: unzip dist/ngff_rfc8-0.0.4-py3-none-any.whl
 
       - run: ls ngff_rfc8/schemas
