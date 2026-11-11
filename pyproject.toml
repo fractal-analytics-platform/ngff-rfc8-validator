@@ -7,7 +7,7 @@ authors = [
     { name = "Sonia Zorba", email = "sonia.zorba@exact-lab.it" },
     { name = "Tommaso Comparin", email = "tommaso.comparin@exact-lab.it" },
 ]
-requires-python = ">=3.12,<=3.15"
+requires-python = ">=3.12,<3.16"
 dependencies = [
     "jsonschema >=4.26.0, <4.27.0",
 ]
